@@ -1,16 +1,19 @@
-﻿using Microsoft.Identity.Client;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+
 using System.Windows;
 using System.Windows.Interop;
+
+using Microsoft.Identity.Client;
+
 
 namespace active_directory_wpf_msgraph_v2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
- 
+
     public partial class MainWindow : Window
     {
         //Set the API Endpoint to Graph 'me' endpoint. 
@@ -39,7 +42,7 @@ namespace active_directory_wpf_msgraph_v2
 
             IAccount firstAccount;
 
-            switch(howToSignIn.SelectedIndex)
+            switch (howToSignIn.SelectedIndex)
             {
                 // 0: Use account used to signed-in in Windows (WAM)
                 case 0:
@@ -153,11 +156,37 @@ namespace active_directory_wpf_msgraph_v2
         private void DisplayBasicTokenInfo(AuthenticationResult authResult)
         {
             TokenInfoText.Text = "";
-            if (authResult != null)
+            if (authResult == null)
             {
-                TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
-                TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
+                return;
             }
+
+            var idToken = authResult.IdToken;
+            var accessToken = authResult.AccessToken;
+
+            // Set the Id & Access Token to be displayed
+            IdTokenText.Text = idToken;
+            AccessTokenText.Text = accessToken;
+
+            SimpleDisplayToken(authResult);
+            //ClaimDisplayToken(idToken);
+        }
+
+        private void SimpleDisplayToken(AuthenticationResult authResult)
+        {
+            TokenInfoText.Text += $"Username: {authResult.Account.Username}" + Environment.NewLine;
+            TokenInfoText.Text += $"Token Expires: {authResult.ExpiresOn.ToLocalTime()}" + Environment.NewLine;
+        }
+
+        private void ClaimDisplayToken(string idToken)
+        {
+            var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(idToken);
+            var claims = token.Claims;
+
+            TokenInfoText.Text = "";
+            TokenInfoText.Text += $"Name: {claims.GetClaimValue("name")}" + Environment.NewLine;
+            TokenInfoText.Text += $"User Identifier: {claims.GetClaimValue("oid")}" + Environment.NewLine;
+            TokenInfoText.Text += $"Identity Provider: {claims.GetClaimValue("iss")}" + Environment.NewLine;
         }
 
         private void UseWam_Changed(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

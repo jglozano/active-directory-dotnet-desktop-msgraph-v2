@@ -21,6 +21,10 @@
             <TextBox x:Name="ResultText" TextWrapping="Wrap" MinHeight="120" Margin="5" FontFamily="Segoe Ui"/>
             <Label Content="Token Info" Margin="0,0,0,-5" FontFamily="Segoe Ui" />
             <TextBox x:Name="TokenInfoText" TextWrapping="Wrap" MinHeight="70" Margin="5" FontFamily="Segoe Ui"/>
+            <Label Grid.Row="5" Content="Id Token" Margin="0,0,0,-5" FontFamily="Segoe Ui" />
+            <TextBox Grid.Row="6" x:Name="IdTokenText" TextWrapping="Wrap" Margin="5" FontFamily="Segoe Ui" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+            <Label Grid.Row="7" Content="Access Token" Margin="0,0,0,-5" FontFamily="Segoe Ui" />
+            <TextBox Grid.Row="8" x:Name="AccessTokenText" TextWrapping="Wrap" Margin="5" FontFamily="Segoe Ui" ScrollViewer.VerticalScrollBarVisibility="Auto" />
         </StackPanel>
     </Grid>
 </Window>
